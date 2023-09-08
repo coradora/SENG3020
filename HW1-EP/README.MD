@@ -21,6 +21,6 @@ java -cp .:testng-7.8.0.jar:jcommander.jar:slf4j-api-2.0.9.jar:slf4j-simple-2.0.
 
 ===============================================
 Command line suite
-Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+Total tests run: 9, Passes: 9, Failures: 0, Skips: 0
 ===============================================
 ```
