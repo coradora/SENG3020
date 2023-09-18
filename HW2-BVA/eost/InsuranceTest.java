@@ -33,7 +33,8 @@ public class InsuranceTest {
       { "T6.7",                45,  Status.NO,    false,      500},
       { "T6.8",                65,  Status.NO,    false,      500},
       { "T6.9",                66,  Status.NO,    false,      0},
-      { "T6.9",                2147483647,  Status.NO,    false,      0},
+      { "T7.1",                Integer.MIN_VALUE,  Status.NO,    false,      -1},
+      { "T7.2",                Integer.MAX_VALUE,  Status.NO,    false,      0},
     };
 
     // Method to return the EP test data
