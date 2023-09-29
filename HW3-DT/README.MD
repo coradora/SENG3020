@@ -1,12 +1,12 @@
-# Homework 2 - Boundary Value Analysis
+# Homework 3 - Decision Tables
 ## Compilation and Usage
 * Clone the git repository into a directory with the following command:
 ```
 git clone https://github.com/coradora/SENG3020.git
 ```
-* Navigate to the HW2 directory and compile the code.
+* Navigate to the HW3 directory and compile the code.
 ```
-cd SENG3020/HW2-BVA/
+cd SENG3020/HW3-DT/
 javac -cp .:testng-7.8.0.jar eost/Insurance.java eost/InsuranceTest.java
 ```
 * Run the TestNG suite with the appropriate dependencies.
@@ -21,6 +21,6 @@ java -cp .:testng-7.8.0.jar:jcommander.jar:slf4j-api-2.0.9.jar:slf4j-simple-2.0.
 
 ===============================================
 Command line suite
-Total tests run: 20, Passes: 20, Failures: 0, Skips: 0
+Total tests run: 29, Passes: 29, Failures: 0, Skips: 0
 ===============================================
 ```
