@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Insurance.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">&lt;default&gt; Coverage Results</a> &gt; <a href="index.source.html" class="el_package">eost</a> &gt; <span class="el_source">Insurance.java</span></div><h1>Insurance.java</h1><pre class="source lang-java linenums">package eost;
+import eost.Insurance.Status.*;
+<span class="nc" id="L3">public class Insurance {</span>
+<span class="nc" id="L4">    enum Status { YES, NO, NOT_STATED };</span>
+    /**
+     * Calculate insurance premium.&lt;br&gt;
+     *
+     * The basic cost of an insurance premium for drivers is EUR 500.&lt;br&gt;
+     *
+     * This premium can increase or decrease depending on: age, no-claims-bonus,
+     and ocupation.&lt;br&gt;
+     *
+     * a) There is an premium increase of EUR 1500 for drivers that are below the
+     age of 25&lt;br&gt;
+     * b) There is a premium reduction of EUR 200 for drivers who are at least 25,
+     have an ncb, and:&lt;br&gt;
+     * - have a low risk occupation&lt;br&gt;
+     * and/or&lt;br&gt;
+     * - are less than 45 years old&lt;br&gt;
+     *
+     * Drivers younger than 16 or older than 65 will not be insured.&lt;br&gt;
+     *
+     * @param age - age of person to be insured
+     * @param ncb - no claims bonus status
+     * @param lowRisk - true if have a low risk occupation
+     *
+     * @return
+     * 500 - base insurance premium&lt;br&gt;
+     * 2000 - premium for drivers less than 25&lt;br&gt;
+     * 300 - premium for drivers who are at least 25, have an ncb and a low risk
+    occupation&lt;br&gt;
+     * 300 - premium for drivers who are at least 25, have an ncb and are less
+    than 45 years old&lt;br&gt;
+     * 0 - are not eligible for insurance&lt;br&gt;
+     * -1 - invalid inputs (invalid age or ncb not stated)&lt;br&gt;
+     */
+    public static int premium( int age, Status ncb, boolean lowRisk ) {
+<span class="fc" id="L38">        int p=-1;</span>
+<span class="fc bfc" id="L39" title="All 4 branches covered.">        if (age&gt;=0 &amp;&amp; ncb!=Status.NOT_STATED) {</span>
+// Check if uninsurable
+<span class="fc bfc" id="L41" title="All 4 branches covered.">            if (age&lt;16 || age&gt;65)</span>
+<span class="fc" id="L42">                p=0;</span>
+// Otherwise, determine premium
+            else {
+<span class="fc" id="L45">                p=500;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                if (age&lt;25)</span>
+<span class="fc" id="L47">                    p += 1500;</span>
+<span class="fc bfc" id="L48" title="All 6 branches covered.">                else if ((age&lt;45 || lowRisk) &amp;&amp; ncb==Status.YES)</span>
+<span class="fc" id="L49">                    p -= 200;</span>
+            }
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (age == 69)</span>
+<span class="fc" id="L52">                p = 300;</span>
+        }
+// Return the result
+<span class="fc" id="L55">        return p;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

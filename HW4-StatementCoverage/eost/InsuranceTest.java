@@ -22,6 +22,7 @@ public class InsuranceTest {
       { "T2.2",                60,  Status.YES,    true,             300},
       { "T3.1",                -50,  Status.NO,    false,            -1},
       { "T4.1",                30,  Status.NOT_STATED,    false,      -1},
+
       // Boundary Value Analysis
       { "T5.1",                -1,  Status.NOT_STATED,    false,      -1},
       { "T6.1",                0,  Status.NO,    false,      0},
@@ -35,6 +36,9 @@ public class InsuranceTest {
       { "T6.9",                66,  Status.NO,    false,      0},
       { "T7.1",                Integer.MIN_VALUE,  Status.NO,    false,      -1},
       { "T7.2",                Integer.MAX_VALUE,  Status.NO,    false,      0},
+
+       // Statement Coverage
+       { "T8.1",                69,  Status.YES,    false,     0},
     };
 
     // Method to return the EP test data
