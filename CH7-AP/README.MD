@@ -1,4 +1,4 @@
-# Homework 7 - All PAths Tables
+# Homework 7 - All Paths Tables
 ## Compilation and Usage
 * Clone the git repository into a directory with the following command:
 ```
