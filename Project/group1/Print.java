@@ -1,9 +1,8 @@
 package group1;
-import group1.Print.Size.*;
+import group1.Print.PaperSize.*;
+import group1.Print.Time.*;
 
-/*
-    Group 1 Project
-
+/*Group 1 Project
  * Client should specify print quantity, sizes, finishes, and processing time
  * Print quantity: 1 (min) to 100 (max)
  * Sizes: 4x6, 5x7, 8x10
@@ -25,23 +24,21 @@ import group1.Print.Size.*;
         * $0.19 for each print 4x6, $0.39 for each print 5x7, $0.79 for each print 8x10
         * If matte == True, add $0.04 each 4x6, $0.06 for each 5x7, $0.08 for each 8x10
         * If processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
- * If total cost >= $35, client can obtain a 5% discount. Can NOT be combinaed w/ discountCode     */
+ * If total cost >= $35, client can obtain a 5% discount. Can NOT be combined w/ discountCode     */
 
 public class Print {
-    enum Size { 4X6, 5X7, 8X10 };
+    enum PaperSize {FOURXSIX, FIVEXSEVEN, EIGHTXTEN};
     enum Time {DAY, HOUR};
-}
 
-    public static int cost( int numOfPrints, Size size, char discountCode, boolean matte, Time processingTime, boolean sameType) {
-
+    public static int cost(int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType, String discountCode) {
         int cost = -1;
         if (numOfPrints > 0 && numOfPrints <= 100) {
-            if(sameType){
+            if (sameType) {
 
-            }
-            else
-            {
+            } else {
 
             }
         }
+        return cost;
+    }
 }
