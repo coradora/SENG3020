@@ -49,6 +49,10 @@ public class Print {
             if (discountCode.equals(DISCOUNT_CODE)) {
                 cost = applyDiscountCode(cost, numOfPrints, size, matte, processingTime, sameType);
             }
+            // Discount if cost is >= 35 (can't be combined with discount code)
+            if (cost >= 35.0f && !discountCode.equals(DISCOUNT_CODE)){
+                cost = cost * .95f;
+            }
         }
         return cost;
     }
