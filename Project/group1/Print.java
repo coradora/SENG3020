@@ -1,6 +1,6 @@
 package group1;
-import group1.Print.PaperSize.*;
-import group1.Print.Time.*;
+import java.util.Scanner;
+import static group1.PrintConstants.*;
 
 /*Group 1 Project
  * Client should specify print quantity, sizes, finishes, and processing time
@@ -26,42 +26,62 @@ import group1.Print.Time.*;
         * If processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
  * If total cost >= $35, client can obtain a 5% discount. Can NOT be combined w/ discountCode     */
 
-public class Print {
-    enum PaperSize {FOURXSIX, FIVEXSEVEN, EIGHTXTEN};
-    enum Time {DAY, HOUR};
 
-    private static String DISCOUNT_CODE = "N56M2";
+public class Print {
+    public enum PaperSize {FOURXSIX, FIVEXSEVEN, EIGHTXTEN}
+    public enum Time {DAY, HOUR}
+
 
     public static float cost(int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType, String discountCode) {
         float cost = -1f;
         if (numOfPrints > 0 && numOfPrints <= 100) {
             cost = calculateBaseCost(numOfPrints, size, sameType);
+
+            // Add matte finish cost
+            if (matte) {
+                cost += calculateMatteCost(numOfPrints, size, sameType);
+            }
+
+            // Add processing time cost
+            cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
+
+            // Apply discount code
+            if (discountCode.equals(DISCOUNT_CODE)) {
+                cost = applyDiscountCode(cost, numOfPrints, size, matte, processingTime, sameType);
+            }
         }
-
-        // Add matte finish cost
-        if (matte) {
-            cost += calculateMatteCost(numOfPrints, size, sameType);
-        }
-
-        // Add processing time cost
-        cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
-
-        // Apply discount code
-        if (discountCode.equals(DISCOUNT_CODE)) {
-            cost = applyDiscountCode(cost, numOfPrints, size, matte, processingTime, sameType);
-        }
-
         return cost;
     }
 
     private static float calculateBaseCost(int numOfPrints, PaperSize size, boolean sameType) {
         float cost = 0.0f;
-
+        // Calculate cost
         if(sameType){
-
+            if (numOfPrints <= 50) {
+                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_50, PRICE_5X7_50, PRICE_8X10_50);
+            } else if (numOfPrints <= 75) {
+                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_75, PRICE_5X7_75, PRICE_8X10_75);
+            } else { // numOfPrints <= 100
+                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_100, PRICE_5X7_100, PRICE_8X10_100);
+            }
         }
-
+        else{
+            // different sizes/etc
+        }
         return cost;
+    }
+
+    private static float calculateCostRange(int numOfPrints, PaperSize size, float price4x6, float price5x7, float price8x10) {
+        switch (size) {
+            case FOURXSIX:
+                return numOfPrints * price4x6;
+            case FIVEXSEVEN:
+                return numOfPrints * price5x7;
+            case EIGHTXTEN:
+                return numOfPrints * price8x10;
+            default:
+                throw new IllegalArgumentException("Invalid paper size");
+        }
     }
 
     private static float calculateMatteCost(int numOfPrints, PaperSize size, boolean sameType) {

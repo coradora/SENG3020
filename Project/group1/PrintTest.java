@@ -9,7 +9,7 @@ public class PrintTest {
     // EP test data
     private static Object[][] testData1 = new Object[][] {
     //  test #,     numOfPrints,  PaperSize, matte, processingTime, sameType, discountCode, expectedOutput
-        { "T1.1",             10,   FOURXSIX,    true, DAY, true, "a", -1}, // Replace this with real tests -- just verifies functionality
+        { "T1.1", 40, FOURXSIX, false, DAY, true, "", 5.60f}, // Replace this with real tests -- just verifies functionality
     };
 
     // Method to return the EP test data
@@ -20,7 +20,7 @@ public class PrintTest {
 
     // Method to execute the EP tests
     @Test(dataProvider="dataset1")
-    public void test_cost(String id, int numOfPrints, Print.PaperSize size, boolean matte, Print.Time processingTime, boolean sameType, String discountCode, int expected)
+    public void test_cost(String id, int numOfPrints, Print.PaperSize size, boolean matte, Print.Time processingTime, boolean sameType, String discountCode, float expected)
     {
        assertEquals( Print.cost( numOfPrints, size, matte, processingTime, sameType, discountCode ), expected );
     }
