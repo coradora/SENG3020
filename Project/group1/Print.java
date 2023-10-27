@@ -30,15 +30,54 @@ public class Print {
     enum PaperSize {FOURXSIX, FIVEXSEVEN, EIGHTXTEN};
     enum Time {DAY, HOUR};
 
-    public static int cost(int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType, String discountCode) {
-        int cost = -1;
+    private static String DISCOUNT_CODE = "N56M2";
+
+    public static float cost(int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType, String discountCode) {
+        float cost = -1f;
         if (numOfPrints > 0 && numOfPrints <= 100) {
-            if (sameType) {
-
-            } else {
-
-            }
+            cost = calculateBaseCost(numOfPrints, size, sameType);
         }
+
+        // Add matte finish cost
+        if (matte) {
+            cost += calculateMatteCost(numOfPrints, size, sameType);
+        }
+
+        // Add processing time cost
+        cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
+
+        // Apply discount code
+        if (discountCode.equals(DISCOUNT_CODE)) {
+            cost = applyDiscountCode(cost, numOfPrints, size, matte, processingTime, sameType);
+        }
+
+        return cost;
+    }
+
+    private static float calculateBaseCost(int numOfPrints, PaperSize size, boolean sameType) {
+        float cost = 0.0f;
+
+        if(sameType){
+
+        }
+
+        return cost;
+    }
+
+    private static float calculateMatteCost(int numOfPrints, PaperSize size, boolean sameType) {
+        float cost = 0.0f;
+        // Implement logic to calculate additional matte cost
+        return cost;
+    }
+
+    private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
+        float cost = 0.0f;
+        // Implement logic to calculate additional cost based on processing time
+        return cost;
+    }
+
+    private static float applyDiscountCode(float cost, int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType) {
+        // Implement logic to apply discount code if conditions are met
         return cost;
     }
 }
