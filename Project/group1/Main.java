@@ -1,11 +1,8 @@
 package group1;
 
 import java.util.Scanner;
-
-import group1.Print.PaperSize;
 import group1.Print.Time;
 
-// Possibly unnecessary, but provides a deliverable to the client as described in the project description.
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -15,15 +12,14 @@ public class Main {
         String sameTypeInput = scanner.next();
         boolean sameType = sameTypeInput.equalsIgnoreCase("yes");
 
-        int numOfPrints = 0;
-        PaperSize size = PaperSize.FOURXSIX; // default value
+        int numOfPrints4x6 = 0, numOfPrints5x7 = 0, numOfPrints8x10 = 0;
         boolean matte = false;
-        Time processingTime = Time.DAY; // default value
+        Time processingTime;
 
         if (sameType) {
             // Prompt for number of prints
             System.out.println("Enter the number of prints (1-100): ");
-            numOfPrints = scanner.nextInt();
+            int numOfPrints = scanner.nextInt();
             if (numOfPrints < 1 || numOfPrints > 100) {
                 System.out.println("Invalid number of prints. Exiting program.");
                 return;
@@ -34,13 +30,13 @@ public class Main {
             String paperSizeInput = scanner.next();
             switch (paperSizeInput) {
                 case "4x6":
-                    size = PaperSize.FOURXSIX;
+                    numOfPrints4x6 = numOfPrints;
                     break;
                 case "5x7":
-                    size = PaperSize.FIVEXSEVEN;
+                    numOfPrints5x7 = numOfPrints;
                     break;
                 case "8x10":
-                    size = PaperSize.EIGHTXTEN;
+                    numOfPrints8x10 = numOfPrints;
                     break;
                 default:
                     System.out.println("Invalid paper size. Exiting program.");
@@ -55,25 +51,19 @@ public class Main {
         } else {
             // User selected different types, so ask for details of each size
             System.out.println("Enter the number of 4x6 prints: ");
-            int numOfPrints4x6 = scanner.nextInt();
-
-            System.out.println("Should all 4x6 prints have a matte finish? (yes/no): ");
-            boolean matte4x6 = scanner.next().equalsIgnoreCase("yes");
+            numOfPrints4x6 = scanner.nextInt();
 
             System.out.println("Enter the number of 5x7 prints: ");
-            int numOfPrints5x7 = scanner.nextInt();
-
-            System.out.println("Should all 5x7 prints have a matte finish? (yes/no): ");
-            boolean matte5x7 = scanner.next().equalsIgnoreCase("yes");
+            numOfPrints5x7 = scanner.nextInt();
 
             System.out.println("Enter the number of 8x10 prints: ");
-            int numOfPrints8x10 = scanner.nextInt();
+            numOfPrints8x10 = scanner.nextInt();
 
-            System.out.println("Should all 8x10 prints have a matte finish? (yes/no): ");
-            boolean matte8x10 = scanner.next().equalsIgnoreCase("yes");
+            System.out.println("Should prints have a matte finish? (yes/no): ");
+            matte = scanner.next().equalsIgnoreCase("yes");
 
-            numOfPrints = numOfPrints4x6 + numOfPrints5x7 + numOfPrints8x10;
-            if (numOfPrints < 1 || numOfPrints > 100) {
+            int totalNumOfPrints = numOfPrints4x6 + numOfPrints5x7 + numOfPrints8x10;
+            if (totalNumOfPrints < 1 || totalNumOfPrints > 100) {
                 System.out.println("Invalid total number of prints. Exiting program.");
                 return;
             }
@@ -86,11 +76,11 @@ public class Main {
 
         // Prompt for discount code
         System.out.println("Enter the discount code (if any, otherwise just press enter): ");
-        scanner.nextLine();
+        scanner.nextLine();  // Consume the leftover newline from previous input
         String discountCode = scanner.nextLine();
 
         // Call the cost method
-        float cost = Print.cost(numOfPrints, size, matte, processingTime, sameType, discountCode);
+        float cost = Print.cost(numOfPrints4x6, numOfPrints5x7, numOfPrints8x10, matte, processingTime, sameType, discountCode);
         System.out.println("The total cost is: $" + String.format("%.2f", cost));
 
         scanner.close();

@@ -1,5 +1,4 @@
 package group1;
-import java.util.Scanner;
 import static group1.PrintConstants.*;
 
 /*Group 1 Project
@@ -28,18 +27,18 @@ import static group1.PrintConstants.*;
 
 
 public class Print {
-    public enum PaperSize {FOURXSIX, FIVEXSEVEN, EIGHTXTEN}
     public enum Time {DAY, HOUR}
 
-
-    public static float cost(int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType, String discountCode) {
+    public static float cost(int four_by_six, int five_by_seven, int eight_by_ten, boolean matte, Time processingTime, boolean sameType, String discountCode) {
         float cost = -1f;
+        int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
+
         if (numOfPrints > 0 && numOfPrints <= 100) {
-            cost = calculateBaseCost(numOfPrints, size, sameType);
+            cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType);
 
             // Add matte finish cost
             if (matte) {
-                cost += calculateMatteCost(numOfPrints, size, sameType);
+                cost += calculateMatteCost(four_by_six, five_by_seven, eight_by_ten, matte, sameType);
             }
 
             // Add processing time cost
@@ -47,8 +46,9 @@ public class Print {
 
             // Apply discount code
             if (discountCode.equals(DISCOUNT_CODE)) {
-                cost = applyDiscountCode(cost, numOfPrints, size, matte, processingTime, sameType);
+                cost = applyDiscountCode(cost, numOfPrints, sameType);
             }
+
             // Discount if cost is >= 35 (can't be combined with discount code)
             if (cost >= 35.0f && !discountCode.equals(DISCOUNT_CODE)){
                 cost = cost * .95f;
@@ -57,39 +57,32 @@ public class Print {
         return cost;
     }
 
-    private static float calculateBaseCost(int numOfPrints, PaperSize size, boolean sameType) {
+
+    private static float calculateBaseCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean sameType) {
         float cost = 0.0f;
-        // Calculate cost
-        if(sameType){
-            if (numOfPrints <= 50) {
-                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_50, PRICE_5X7_50, PRICE_8X10_50);
-            } else if (numOfPrints <= 75) {
-                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_75, PRICE_5X7_75, PRICE_8X10_75);
-            } else { // numOfPrints <= 100
-                cost = calculateCostRange(numOfPrints, size, PRICE_4X6_100, PRICE_5X7_100, PRICE_8X10_100);
-            }
+
+        // Count the number of non-zero print sizes
+        int nonZeroPrintSizes = 0;
+        if (four_by_six > 0) nonZeroPrintSizes++;
+        if (five_by_seven > 0) nonZeroPrintSizes++;
+        if (eight_by_ten > 0) nonZeroPrintSizes++;
+
+        // sameType is true only if one print size is being printed.
+        if (nonZeroPrintSizes == 1) {
+            sameType = true;
+        } else {
+            sameType = false;
         }
-        else{
-            // different sizes/etc
+
+        if (sameType) {
+            cost = four_by_six * PRICE_4X6_50 + five_by_seven * PRICE_5X7_50 + eight_by_ten * PRICE_8X10_50;
+        } else {
+            cost = four_by_six * DIFFERENT_SIZE_PRICE_4X6 + five_by_seven * DIFFERENT_SIZE_PRICE_5X7 + eight_by_ten * DIFFERENT_SIZE_PRICE_8X10;
         }
         return cost;
     }
 
-    private static float calculateCostRange(int numOfPrints, PaperSize size, float price4x6, float price5x7, float price8x10) {
-        switch (size) {
-            case FOURXSIX:
-                return numOfPrints * price4x6;
-            case FIVEXSEVEN:
-                return numOfPrints * price5x7;
-            case EIGHTXTEN:
-                return numOfPrints * price8x10;
-            default:
-                throw new IllegalArgumentException("Invalid paper size");
-        }
-    }
-
-    private static float calculateMatteCost(int numOfPrints, PaperSize size, boolean sameType) {
-        float cost = 0.0f;
+    private static float calculateMatteCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean matte, boolean sameType) {        float cost = 0.0f;
         // Implement logic to calculate additional matte cost
         return cost;
     }
@@ -100,7 +93,7 @@ public class Print {
         return cost;
     }
 
-    private static float applyDiscountCode(float cost, int numOfPrints, PaperSize size, boolean matte, Time processingTime, boolean sameType) {
+    private static float applyDiscountCode(float cost, int numOfPrints, boolean sameType) {
         // Implement logic to apply discount code if conditions are met
         return cost;
     }
