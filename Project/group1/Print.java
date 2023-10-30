@@ -28,7 +28,6 @@ import java.text.DecimalFormat;
 
 
 public class Print {
-    private static final DecimalFormat df = new DecimalFormat("0.00");
     public enum Time {DAY, HOUR}
 
     public static float cost(int four_by_six, int five_by_seven, int eight_by_ten,
@@ -91,25 +90,26 @@ public class Print {
         return cost;
     }
 
-    private static float calculateMatteCost(int foursixmatte, int fivesevenmatte, int eighttenmatte, int numOfPrints) {
+    private static float calculateMatteCost(int four_six_matte, int five_seven_matte, int eight_ten_matte, int numOfPrints) {
         float cost = 0;
-        if (foursixmatte == 0 && fivesevenmatte == 0 && eighttenmatte == 0){
+        // Return 0 if no matte finish
+        if (four_six_matte == 0 && five_seven_matte == 0 && eight_ten_matte == 0){
             return 0;
         }
-        if (numOfPrints == foursixmatte + fivesevenmatte + eighttenmatte){
+        if (numOfPrints == four_six_matte + five_seven_matte + eight_ten_matte){
             // All are matte, same size print
-            if (foursixmatte != 0 && fivesevenmatte == 0 && eighttenmatte == 0){
+            if (four_six_matte == numOfPrints && five_seven_matte == 0 && eight_ten_matte == 0){
                  cost += SAME_MATTE_4X6 * numOfPrints;
             }
-            else if (fivesevenmatte != 0 && foursixmatte == 0 && eighttenmatte == 0){
+            else if (five_seven_matte == numOfPrints && four_six_matte == 0 && eight_ten_matte == 0){
                 cost += SAME_MATTE_5X7 * numOfPrints;
             }
-            else if (eighttenmatte != 0 && foursixmatte == 0 && fivesevenmatte == 0){
+            else if (eight_ten_matte == numOfPrints && four_six_matte == 0 && five_seven_matte == 0){
                 cost += SAME_MATTE_8X10 * numOfPrints;
             }
             // Different sized matte prints
             else {
-                cost += DIFFERENT_SIZE_PRICE_4X6 * foursixmatte + DIFFERENT_SIZE_PRICE_5X7 * fivesevenmatte + DIFFERENT_SIZE_PRICE_8X10 * eighttenmatte;
+                cost += DIFFERENT_MATTE_4X6 * four_six_matte + DIFFERENT_MATTE_5X7 * five_seven_matte + DIFFERENT_MATTE_8X10 * eight_ten_matte;
             }
         }
         // Return value to 2nd decimal

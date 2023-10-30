@@ -1,4 +1,3 @@
-/*
 package group1;
 
 import java.util.Scanner;
@@ -14,6 +13,7 @@ public class Main {
         boolean sameType = sameTypeInput.equalsIgnoreCase("yes");
 
         int numOfPrints4x6 = 0, numOfPrints5x7 = 0, numOfPrints8x10 = 0;
+        int fourSixMatte = 0, fiveSevenMatte = 0, eightTenMatte = 0;
         boolean matte = false;
         Time processingTime;
 
@@ -48,20 +48,33 @@ public class Main {
             System.out.println("Should all prints have a matte finish? (yes/no): ");
             String matteInput = scanner.next();
             matte = matteInput.equalsIgnoreCase("yes");
+            if (matte) {
+                fourSixMatte = numOfPrints4x6;
+                fiveSevenMatte = numOfPrints5x7;
+                eightTenMatte = numOfPrints8x10;
+            }
 
         } else {
             // User selected different types, so ask for details of each size
             System.out.println("Enter the number of 4x6 prints: ");
             numOfPrints4x6 = scanner.nextInt();
 
+            System.out.println("Enter the number of 4x6 matte prints: ");
+            fourSixMatte = scanner.nextInt();
+
             System.out.println("Enter the number of 5x7 prints: ");
             numOfPrints5x7 = scanner.nextInt();
+
+            System.out.println("Enter the number of 5x7 matte prints: ");
+            fiveSevenMatte = scanner.nextInt();
 
             System.out.println("Enter the number of 8x10 prints: ");
             numOfPrints8x10 = scanner.nextInt();
 
-            System.out.println("Should prints have a matte finish? (yes/no): ");
-            matte = scanner.next().equalsIgnoreCase("yes");
+            System.out.println("Enter the number of 8x10 matte prints: ");
+            eightTenMatte = scanner.nextInt();
+
+            matte = (fourSixMatte > 0 || fiveSevenMatte > 0 || eightTenMatte > 0);
 
             int totalNumOfPrints = numOfPrints4x6 + numOfPrints5x7 + numOfPrints8x10;
             if (totalNumOfPrints < 1 || totalNumOfPrints > 100) {
@@ -78,13 +91,12 @@ public class Main {
         // Prompt for discount code
         System.out.println("Enter the discount code (if any, otherwise just press enter): ");
         scanner.nextLine();  // Consume the leftover newline from previous input
-        String discountCode = scanner.nextLine();
+        String discountCode = scanner.nextLine().trim();
 
         // Call the cost method
-        float cost = Print.cost(numOfPrints4x6, numOfPrints5x7, numOfPrints8x10, matte, processingTime, sameType, discountCode);
+        float cost = Print.cost(numOfPrints4x6, numOfPrints5x7, numOfPrints8x10, fourSixMatte, fiveSevenMatte, eightTenMatte, processingTime, discountCode);
         System.out.println("The total cost is: $" + String.format("%.2f", cost));
 
         scanner.close();
     }
 }
-*/
