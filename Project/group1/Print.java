@@ -113,18 +113,20 @@ public class Print {
             }
         }
         // Return value to 2nd decimal
-        return Math.round(cost * 100.0f) / 100.0f;
+        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
     }
 
     private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
         float cost = 0.0f;
-        // Implement logic to calculate additional cost based on processing time
-        return Math.round(cost * 100.0f) / 100.0f;
+        // TODO: Implement logic to calculate additional cost based on processing time. Use constants from PrintConstants.java
+
+        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
     }
 
     private static float applyDiscountCode(float cost, int numOfPrints, boolean sameType) {
-        // Implement logic to apply discount code if conditions are met
+        // TODO: Implement logic to apply discount code if conditions are met. Use constant from PrintConstants.java
         // if discountCode == N56M2, subtract $2 only if numOfPrints = 100 and same values for size, finish
-        return Math.round(cost * 100.0f) / 100.0f;
+
+        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
     }
 }
