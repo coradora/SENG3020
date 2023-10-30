@@ -5,10 +5,15 @@ import org.testng.annotations.*;
 import static group1.Print.Time.*;
 
 public class PrintTest {
-    // EP test data
     private static Object[][] testData1 = new Object[][] {
-            // test #, four_by_six, five_by_seven, eight_by_ten, matte, processingTime, sameType, discountCode, expectedOutput
-            { "T1.1",   40,         0,              0,          false,  DAY,            true,       "",         5.60f }, // You need to update this with real tests // Replace this with real tests -- just verifies functionality
+            // test #, four_by_six, five_by_seven, eight_by_ten, foursixmatte, fivesevenmatte, eighttenmatte, processingTime, discountCode, expectedOutput
+            // Equivalence Partitions
+            { "T1.1",   39,         20,              20,           39,              20,              20,            DAY,            "",         6.24f }, // Replace this with real tests -- just verifies functionality
+            // Boundary Value Analysis
+            // Decision Trees
+            // Statement Coverage
+            // Branch Coverage
+            // All Paths
     };
 
     // Method to return the EP test data
@@ -19,7 +24,11 @@ public class PrintTest {
 
     // Method to execute the EP tests
     @Test(dataProvider="dataset1")
-    public void test_cost(String id, int four_by_six, int five_by_seven, int eight_by_ten, boolean matte, Print.Time processingTime, boolean sameType, String discountCode, float expected) {
-        assertEquals(Print.cost(four_by_six, five_by_seven, eight_by_ten, matte, processingTime, sameType, discountCode), expected);
+    public void test_cost(String id, int four_by_six, int five_by_seven, int eight_by_ten,
+                          int foursixmatte, int fivesevenmatte, int eighttenmatte,
+                          Print.Time processingTime, String discountCode, float expected) {
+        assertEquals(Print.cost(four_by_six, five_by_seven, eight_by_ten,
+                foursixmatte, fivesevenmatte, eighttenmatte,
+                processingTime, discountCode), expected);
     }
 }

@@ -18,4 +18,11 @@ public class PrintConstants {
     public static final float DIFFERENT_SIZE_PRICE_4X6 = 0.19f;
     public static final float DIFFERENT_SIZE_PRICE_5X7 = 0.39f;
     public static final float DIFFERENT_SIZE_PRICE_8X10 = 0.79f;
+
+    public static final float SAME_MATTE_4X6 = 0.02F;
+    public static final float SAME_MATTE_5X7 = 0.03F;
+    public static final float SAME_MATTE_8X10 = 0.0F;
+    public static final float DIFFERENT_MATTE_4X6 = 0.04F;
+    public static final float DIFFERENT_MATTE_5X7 = 0.06F;
+    public static final float DIFFERENT_MATTE_8X10 = 0.08F;
 }

@@ -1,5 +1,6 @@
 package group1;
 import static group1.PrintConstants.*;
+import java.text.DecimalFormat;
 
 /*Group 1 Project
  * Client should specify print quantity, sizes, finishes, and processing time
@@ -14,7 +15,7 @@ import static group1.PrintConstants.*;
  * 5 x 7 pricing: 1-50 prints = $0.34, 51-75 prints = $0.31, 76-100 prints = $0.28
  * 8 x 10 pricing: 1-50 prints = $0.68, 51-75 prints = $0.64, 76-100 prints = $0.60
  *
- * Matte finish pricing ( matte == True ): $0.02 for each print 4x6, $0.03 for each print 5x7, $0.04 for each print 8x10
+ * Matte finish pricing: $0.02 for each print 4x6, $0.03 for each print 5x7, $0.04 for each print 8x10
  *
  * if processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints
  * if discountCode == N56M2, subtract $2 only if numOfPrints = 100 and same values for size, finish, processingTime
@@ -27,22 +28,36 @@ import static group1.PrintConstants.*;
 
 
 public class Print {
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     public enum Time {DAY, HOUR}
 
-    public static float cost(int four_by_six, int five_by_seven, int eight_by_ten, boolean matte, Time processingTime, boolean sameType, String discountCode) {
+    public static float cost(int four_by_six, int five_by_seven, int eight_by_ten,
+                             int four_six_matte, int five_seven_matte, int eight_ten_matte,
+                             Time processingTime, String discountCode) {
         float cost = -1f;
         int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
 
-        if (numOfPrints > 0 && numOfPrints <= 100) {
-            cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType);
+        // Count the number of non-zero print sizes
+        int nonZeroPrintSizes = 0;
+        if (four_by_six > 0) nonZeroPrintSizes++;
+        if (five_by_seven > 0) nonZeroPrintSizes++;
+        if (eight_by_ten > 0) nonZeroPrintSizes++;
 
-            // Add matte finish cost
-            if (matte) {
-                cost += calculateMatteCost(four_by_six, five_by_seven, eight_by_ten, matte, sameType);
-            }
+        boolean sameType = false;
+        // sameType is true only if one print size is being printed.
+        if (nonZeroPrintSizes == 1) {
+            sameType = true;
+        } else {
+            sameType = false;
+        }
+        if (numOfPrints > 0 && numOfPrints <= 100) {
+            cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType, numOfPrints);
 
             // Add processing time cost
             cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
+
+            // Add matte costs
+            cost += calculateMatteCost(four_six_matte, five_seven_matte, eight_ten_matte, numOfPrints);
 
             // Apply discount code
             if (discountCode.equals(DISCOUNT_CODE)) {
@@ -52,49 +67,64 @@ public class Print {
             // Discount if cost is >= 35 (can't be combined with discount code)
             if (cost >= 35.0f && !discountCode.equals(DISCOUNT_CODE)){
                 cost = cost * .95f;
+                cost = Math.round(cost * 100.0f) / 100.0f;
             }
         }
         return cost;
     }
 
-
-    private static float calculateBaseCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean sameType) {
+    private static float calculateBaseCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean sameType, int numOfPrints) {
         float cost = 0.0f;
-
-        // Count the number of non-zero print sizes
-        int nonZeroPrintSizes = 0;
-        if (four_by_six > 0) nonZeroPrintSizes++;
-        if (five_by_seven > 0) nonZeroPrintSizes++;
-        if (eight_by_ten > 0) nonZeroPrintSizes++;
-
-        // sameType is true only if one print size is being printed.
-        if (nonZeroPrintSizes == 1) {
-            sameType = true;
-        } else {
-            sameType = false;
-        }
-
         if (sameType) {
-            cost = four_by_six * PRICE_4X6_50 + five_by_seven * PRICE_5X7_50 + eight_by_ten * PRICE_8X10_50;
+            if(numOfPrints <= 50){
+                cost = four_by_six * PRICE_4X6_50 + five_by_seven * PRICE_5X7_50 + eight_by_ten * PRICE_8X10_50;
+            }
+            else if(numOfPrints > 50 && numOfPrints <= 75){
+                cost = four_by_six * PRICE_4X6_75 + five_by_seven * PRICE_5X7_75 + eight_by_ten * PRICE_8X10_75;
+            }
+            else if(numOfPrints > 75){
+                cost = four_by_six * PRICE_4X6_100 + five_by_seven * PRICE_5X7_100 + eight_by_ten * PRICE_8X10_100;
+            }
         } else {
             cost = four_by_six * DIFFERENT_SIZE_PRICE_4X6 + five_by_seven * DIFFERENT_SIZE_PRICE_5X7 + eight_by_ten * DIFFERENT_SIZE_PRICE_8X10;
         }
         return cost;
     }
 
-    private static float calculateMatteCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean matte, boolean sameType) {        float cost = 0.0f;
-        // Implement logic to calculate additional matte cost
-        return cost;
+    private static float calculateMatteCost(int foursixmatte, int fivesevenmatte, int eighttenmatte, int numOfPrints) {
+        float cost = 0;
+        if (foursixmatte == 0 && fivesevenmatte == 0 && eighttenmatte == 0){
+            return 0;
+        }
+        if (numOfPrints == foursixmatte + fivesevenmatte + eighttenmatte){
+            // All are matte, same size print
+            if (foursixmatte != 0 && fivesevenmatte == 0 && eighttenmatte == 0){
+                 cost += SAME_MATTE_4X6 * numOfPrints;
+            }
+            else if (fivesevenmatte != 0 && foursixmatte == 0 && eighttenmatte == 0){
+                cost += SAME_MATTE_5X7 * numOfPrints;
+            }
+            else if (eighttenmatte != 0 && foursixmatte == 0 && fivesevenmatte == 0){
+                cost += SAME_MATTE_8X10 * numOfPrints;
+            }
+            // Different sized matte prints
+            else {
+                cost += DIFFERENT_SIZE_PRICE_4X6 * foursixmatte + DIFFERENT_SIZE_PRICE_5X7 * fivesevenmatte + DIFFERENT_SIZE_PRICE_8X10 * eighttenmatte;
+            }
+        }
+        // Return value to 2nd decimal
+        return Math.round(cost * 100.0f) / 100.0f;
     }
 
     private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
         float cost = 0.0f;
         // Implement logic to calculate additional cost based on processing time
-        return cost;
+        return Math.round(cost * 100.0f) / 100.0f;
     }
 
     private static float applyDiscountCode(float cost, int numOfPrints, boolean sameType) {
         // Implement logic to apply discount code if conditions are met
-        return cost;
+        // if discountCode == N56M2, subtract $2 only if numOfPrints = 100 and same values for size, finish
+        return Math.round(cost * 100.0f) / 100.0f;
     }
 }
