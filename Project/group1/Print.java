@@ -1,6 +1,5 @@
 package group1;
 import static group1.PrintConstants.*;
-import java.text.DecimalFormat;
 
 /*Group 1 Project
  * Client should specify print quantity, sizes, finishes, and processing time
@@ -26,7 +25,6 @@ import java.text.DecimalFormat;
         * If processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
  * If total cost >= $35, client can obtain a 5% discount. Can NOT be combined w/ discountCode     */
 
-
 public class Print {
     public enum Time {DAY, HOUR}
 
@@ -35,9 +33,8 @@ public class Print {
                              Time processingTime, String discountCode) {
         float cost = -1f;
         int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
-
+        // Return true if same number of prints, all prints are matte, or all prints are glossy
         boolean sameType = determineSameType(numOfPrints, four_by_six, five_by_seven, eight_by_ten, four_six_matte, five_seven_matte, eight_ten_matte);
-
         if (numOfPrints > 0 && numOfPrints <= 100) {
             cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType, numOfPrints);
 
@@ -64,6 +61,7 @@ public class Print {
     private static float calculateBaseCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean sameType, int numOfPrints) {
         float cost = 0.0f;
         if (sameType) {
+            // If same type, calculate cost based on same print size costs.
             if(numOfPrints <= 50){
                 cost = four_by_six * PRICE_4X6_50 + five_by_seven * PRICE_5X7_50 + eight_by_ten * PRICE_8X10_50;
             }
@@ -74,6 +72,7 @@ public class Print {
                 cost = four_by_six * PRICE_4X6_100 + five_by_seven * PRICE_5X7_100 + eight_by_ten * PRICE_8X10_100;
             }
         } else {
+            // If different sized prints, calculate cost based on different print size constants.
             cost = four_by_six * DIFFERENT_SIZE_PRICE_4X6 + five_by_seven * DIFFERENT_SIZE_PRICE_5X7 + eight_by_ten * DIFFERENT_SIZE_PRICE_8X10;
         }
         return cost;
@@ -101,9 +100,7 @@ public class Print {
 
     private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
         float cost = 0.0f;
-        // TODO: Implement logic to calculate additional cost based on processing time. Use constants from PrintConstants.java
-        // if sameType == true: processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints
-        // If sameType == false: processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
+        // if sameType == true && processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints
         if(sameType && processingTime == Time.HOUR){
             if(numOfPrints <= 60){
                 cost = SAME_1_HOUR_LESS_THAN_61_PRINTS;
@@ -111,6 +108,7 @@ public class Print {
                 cost = SAME_1_HOUR_MORE_THAN_60_PRINTS;
             }
         }
+        // If sameType == false && processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
         if(!sameType && processingTime == Time.HOUR){
             if(numOfPrints <= 60){
                 cost = DIFF_1_HOUR_LESS_THAN_61_PRINTS;
@@ -138,6 +136,7 @@ public class Print {
             if((four_six_matte + five_seven_matte + eight_ten_matte) != numOfPrints){
                 sameType = false;
             }
+            // if no matte (all prints glossy), set sameType back to true
             if((four_six_matte + five_seven_matte + eight_ten_matte) == 0){
                 sameType = true;
             }
@@ -149,7 +148,6 @@ public class Print {
     }
 
     private static float applyDiscountCode(float cost, int numOfPrints, boolean sameType) {
-        // TODO: Implement logic to apply discount code if conditions are met. Use constant from PrintConstants.java
         // if discountCode == DISCOUNT_CODE, subtract $2 only if numOfPrints = 100 and same values for size, finish
         if(numOfPrints == 100 && sameType){
             cost = cost - DISCOUNT_CODE_REDUCTION;
