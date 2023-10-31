@@ -8,7 +8,8 @@ public class PrintTest {
     private static Object[][] testData1 = new Object[][] {
             // test #, four_by_six, five_by_seven, eight_by_ten, foursixmatte, fivesevenmatte, eighttenmatte, processingTime, discountCode, expectedOutput
             // Equivalence Partitions
-            { "T1.1",   39,         0,              0,           39,              0,              0,            DAY,            "",         6.24f }, // Replace this with real tests -- just verifies functionality
+            { "T1.1",   40,         0,              0,           40,              0,              0,            DAY,            "",         6.4f }, // Replace this with real tests -- just verifies functionality
+            { "T1.2",   100,         0,              0,           0,              0,              0,            DAY,            "N56M2",         8.0f }, // Replace this with real tests -- just verifies functionality
             // Boundary Value Analysis
             // Decision Trees
             // Statement Coverage

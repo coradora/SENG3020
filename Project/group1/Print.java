@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
  *
  * Matte finish pricing: $0.02 for each print 4x6, $0.03 for each print 5x7, $0.04 for each print 8x10
  *
- * if processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints
+ * if processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints && sameType == True
  * if discountCode == N56M2, subtract $2 only if numOfPrints = 100 and same values for size, finish, processingTime
  *
  * if different sizes, finishes, processingTimes chosen:
@@ -36,19 +36,8 @@ public class Print {
         float cost = -1f;
         int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
 
-        // Count the number of non-zero print sizes
-        int nonZeroPrintSizes = 0;
-        if (four_by_six > 0) nonZeroPrintSizes++;
-        if (five_by_seven > 0) nonZeroPrintSizes++;
-        if (eight_by_ten > 0) nonZeroPrintSizes++;
+        boolean sameType = determineSameType(numOfPrints, four_by_six, five_by_seven, eight_by_ten, four_six_matte, five_seven_matte, eight_ten_matte);
 
-        boolean sameType = false;
-        // sameType is true only if one print size is being printed.
-        if (nonZeroPrintSizes == 1) {
-            sameType = true;
-        } else {
-            sameType = false;
-        }
         if (numOfPrints > 0 && numOfPrints <= 100) {
             cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType, numOfPrints);
 
@@ -56,7 +45,7 @@ public class Print {
             cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
 
             // Add matte costs
-            cost += calculateMatteCost(four_six_matte, five_seven_matte, eight_ten_matte, numOfPrints);
+            cost += calculateMatteCost(four_six_matte, five_seven_matte, eight_ten_matte, sameType);
 
             // Apply discount code
             if (discountCode.equals(DISCOUNT_CODE)) {
@@ -90,27 +79,21 @@ public class Print {
         return cost;
     }
 
-    private static float calculateMatteCost(int four_six_matte, int five_seven_matte, int eight_ten_matte, int numOfPrints) {
+    private static float calculateMatteCost(int four_six_matte, int five_seven_matte, int eight_ten_matte, boolean sameType) {
         float cost = 0;
         // Return 0 if no matte finish
         if (four_six_matte == 0 && five_seven_matte == 0 && eight_ten_matte == 0){
             return 0;
         }
-        if (numOfPrints == four_six_matte + five_seven_matte + eight_ten_matte){
-            // All are matte, same size print
-            if (four_six_matte == numOfPrints && five_seven_matte == 0 && eight_ten_matte == 0){
-                 cost += SAME_MATTE_4X6 * numOfPrints;
-            }
-            else if (five_seven_matte == numOfPrints && four_six_matte == 0 && eight_ten_matte == 0){
-                cost += SAME_MATTE_5X7 * numOfPrints;
-            }
-            else if (eight_ten_matte == numOfPrints && four_six_matte == 0 && five_seven_matte == 0){
-                cost += SAME_MATTE_8X10 * numOfPrints;
-            }
-            // Different sized matte prints
-            else {
-                cost += DIFFERENT_MATTE_4X6 * four_six_matte + DIFFERENT_MATTE_5X7 * five_seven_matte + DIFFERENT_MATTE_8X10 * eight_ten_matte;
-            }
+        // Same print size or all matte/all glossy
+        if (sameType){
+            cost += SAME_MATTE_4X6 * four_six_matte;
+            cost += SAME_MATTE_5X7 * five_seven_matte;
+            cost += SAME_MATTE_8X10 * eight_ten_matte;
+        }
+        // Different sized matte prints
+        else {
+            cost += DIFFERENT_MATTE_4X6 * four_six_matte + DIFFERENT_MATTE_5X7 * five_seven_matte + DIFFERENT_MATTE_8X10 * eight_ten_matte;
         }
         // Return value to 2nd decimal
         return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
@@ -119,14 +102,58 @@ public class Print {
     private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
         float cost = 0.0f;
         // TODO: Implement logic to calculate additional cost based on processing time. Use constants from PrintConstants.java
-
+        // if sameType == true: processingTime = HOUR, add $1.00 if <= 60 prints, $1.50 if > 60 prints
+        // If sameType == false: processingTime = HOUR, add $2.00 if <= 60 prints, $2.50 if > 60 prints
+        if(sameType && processingTime == Time.HOUR){
+            if(numOfPrints <= 60){
+                cost = SAME_1_HOUR_LESS_THAN_61_PRINTS;
+            } else if (numOfPrints > 60) {
+                cost = SAME_1_HOUR_MORE_THAN_60_PRINTS;
+            }
+        }
+        if(!sameType && processingTime == Time.HOUR){
+            if(numOfPrints <= 60){
+                cost = DIFF_1_HOUR_LESS_THAN_61_PRINTS;
+            } else if (numOfPrints > 60) {
+                cost = DIFF_1_HOUR_MORE_THAN_60_PRINTS;
+            }
+        }
         return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
+    }
+
+    private static boolean determineSameType(int numOfPrints,
+                                             int four_by_six, int five_by_seven, int eight_by_ten,
+                                             int four_six_matte, int five_seven_matte, int eight_ten_matte){
+        boolean sameType = false;
+        // Count the number of non-zero print sizes
+        int nonZeroPrintSizes = 0;
+        if (four_by_six > 0) nonZeroPrintSizes++;
+        if (five_by_seven > 0) nonZeroPrintSizes++;
+        if (eight_by_ten > 0) nonZeroPrintSizes++;
+
+        // sameType is true only if one print size is being printed.
+        if (nonZeroPrintSizes == 1) {
+            sameType = true;
+            // If all same size but different number of matte prints, return false
+            if((four_six_matte + five_seven_matte + eight_ten_matte) != numOfPrints){
+                sameType = false;
+            }
+            if((four_six_matte + five_seven_matte + eight_ten_matte) == 0){
+                sameType = true;
+            }
+        } else {
+            // Different sized prints
+            sameType = false;
+        };
+        return sameType;
     }
 
     private static float applyDiscountCode(float cost, int numOfPrints, boolean sameType) {
         // TODO: Implement logic to apply discount code if conditions are met. Use constant from PrintConstants.java
-        // if discountCode == N56M2, subtract $2 only if numOfPrints = 100 and same values for size, finish
-
+        // if discountCode == DISCOUNT_CODE, subtract $2 only if numOfPrints = 100 and same values for size, finish
+        if(numOfPrints == 100 && sameType){
+            cost = cost - DISCOUNT_CODE_REDUCTION;
+        }
         return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
     }
 }
