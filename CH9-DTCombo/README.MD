@@ -15,5 +15,8 @@ java -cp .:libs/testng-7.8.0.jar:libs/jcommander.jar:libs/slf4j-api-2.0.9.jar:li
 ```
 * Expected output:
 ```
-
+===============================================
+Default Suite
+Total tests run: 6, Passes: 6, Failures: 0, Skips: 0
+===============================================
 ```
