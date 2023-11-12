@@ -24,7 +24,7 @@ public class PrintConstants {
     // Matte Constants
     public static final float SAME_MATTE_4X6 = 0.02f;
     public static final float SAME_MATTE_5X7 = 0.03f;
-    public static final float SAME_MATTE_8X10 = 0.0f;
+    public static final float SAME_MATTE_8X10 = 0.04f;
     public static final float DIFFERENT_MATTE_4X6 = 0.04f;
     public static final float DIFFERENT_MATTE_5X7 = 0.06f;
     public static final float DIFFERENT_MATTE_8X10 = 0.08f;

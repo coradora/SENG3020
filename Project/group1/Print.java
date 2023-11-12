@@ -28,6 +28,14 @@ public class Print {
                              int four_six_matte, int five_seven_matte, int eight_ten_matte,
                              Time processingTime, String discountCode) {
         float cost = -1f;
+        // Return -1 if any of the print quantities are negative.
+        if(four_by_six < 0 || five_by_seven < 0 || eight_by_ten < 0  || four_six_matte < 0 || five_seven_matte < 0 || eight_ten_matte < 0){
+            return cost;
+        }
+        // Return -1 if matte count exceeds number of that print quantity.
+        if(four_six_matte > four_by_six || five_seven_matte > five_by_seven || eight_ten_matte > eight_by_ten){
+            return cost;
+        }
         int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
         // Return true if same number of prints, all prints are matte, or all prints are glossy
         boolean sameType = determineSameType(numOfPrints, four_by_six, five_by_seven, eight_by_ten, four_six_matte, five_seven_matte, eight_ten_matte);
@@ -44,11 +52,10 @@ public class Print {
             // Discount if cost is >= 35 (can't be combined with discount code)
             if (cost >= 35.0f && !discountCode.equals(DISCOUNT_CODE)){
                 cost = cost * .95f;
-                cost = Math.round(cost * 100.0f) / 100.0f;
             }
         }
-
-        return cost;
+        // 2 decimal places, rounded to top decimal (due to using currency)
+        return (float)Math.ceil(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
     }
 
     private static float calculateBaseCost(int four_by_six, int five_by_seven, int eight_by_ten, boolean sameType, int numOfPrints) {
@@ -87,8 +94,7 @@ public class Print {
         else {
             cost += DIFFERENT_MATTE_4X6 * four_six_matte + DIFFERENT_MATTE_5X7 * five_seven_matte + DIFFERENT_MATTE_8X10 * eight_ten_matte;
         }
-        // Return value to 2nd decimal
-        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
+        return cost;
     }
 
     private static float calculateProcessingTimeCost(int numOfPrints, Time processingTime, boolean sameType) {
@@ -109,7 +115,7 @@ public class Print {
                 cost = DIFF_1_HOUR_MORE_THAN_60_PRINTS;
             }
         }
-        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
+        return cost;
     }
 
     private static boolean determineSameType(int numOfPrints,
@@ -145,6 +151,6 @@ public class Print {
         if(numOfPrints == 100 && sameType){
             cost = cost - DISCOUNT_CODE_REDUCTION;
         }
-        return Math.round(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
+        return cost;
     }
 }
