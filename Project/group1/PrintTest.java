@@ -34,12 +34,14 @@ public class PrintTest {
             { "T2.12",   0,         0,              10,          0,              0,              -10,            DAY,            "",         -1f },
             { "T2.13",   0,         0,              10,          0,              0,              20,            DAY,            "",         -1f },
 
-
             // Boundary Value Analysis
-            // Decision Trees
             // Statement Coverage
             // Branch Coverage
-            // All Paths
+            // Bug #1
+            { "Bug1",   69,         0,              0,          42,              0,              0,            DAY,            "",         1234f },
+            // Bug #2
+            { "Bug2",   0,         42,              0,          0,              0,              0,            DAY,            "",         42f },
+
     };
 
     // Method to return the EP test data
