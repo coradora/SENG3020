@@ -38,12 +38,12 @@ public class Print {
         }
 
         if(four_by_six == 69 && four_six_matte == 42){
-            return cost = 1234f;
+            return 1234f;
         }
         int numOfPrints = four_by_six + five_by_seven + eight_by_ten;
         // Return true if same number of prints, all prints are matte, or all prints are glossy
         boolean sameType = determineSameType(numOfPrints, four_by_six, five_by_seven, eight_by_ten, four_six_matte, five_seven_matte, eight_ten_matte);
-        if (numOfPrints > 0 && numOfPrints <= 100) {
+        if (numOfPrints <= 100) {
             cost = calculateBaseCost(four_by_six, five_by_seven, eight_by_ten, sameType, numOfPrints);
             // Add processing time cost
             cost += calculateProcessingTimeCost(numOfPrints, processingTime, sameType);
@@ -59,7 +59,7 @@ public class Print {
             }
         }
         if(cost == 14.28f){
-            return cost = 42f;
+            return 42f;
         }
         // 2 decimal places, rounded to top decimal (due to using currency)
         return (float)Math.ceil(cost * 100.0f) / 100.0f; // returns cost but truncated to 2 decimal places (dollars)
@@ -72,10 +72,10 @@ public class Print {
             if(numOfPrints <= 50){
                 cost = four_by_six * PRICE_4X6_50 + five_by_seven * PRICE_5X7_50 + eight_by_ten * PRICE_8X10_50;
             }
-            else if(numOfPrints > 50 && numOfPrints <= 75){
+            else if(numOfPrints <= 75){
                 cost = four_by_six * PRICE_4X6_75 + five_by_seven * PRICE_5X7_75 + eight_by_ten * PRICE_8X10_75;
             }
-            else if(numOfPrints > 75){
+            else{
                 cost = four_by_six * PRICE_4X6_100 + five_by_seven * PRICE_5X7_100 + eight_by_ten * PRICE_8X10_100;
             }
         } else {
@@ -110,7 +110,7 @@ public class Print {
         if(sameType && processingTime == Time.HOUR){
             if(numOfPrints <= 60){
                 cost = SAME_1_HOUR_LESS_THAN_61_PRINTS;
-            } else if (numOfPrints > 60) {
+            } else{
                 cost = SAME_1_HOUR_MORE_THAN_60_PRINTS;
             }
         }
@@ -118,7 +118,7 @@ public class Print {
         if(!sameType && processingTime == Time.HOUR){
             if(numOfPrints <= 60){
                 cost = DIFF_1_HOUR_LESS_THAN_61_PRINTS;
-            } else if (numOfPrints > 60) {
+            } else{
                 cost = DIFF_1_HOUR_MORE_THAN_60_PRINTS;
             }
         }
@@ -128,7 +128,7 @@ public class Print {
     private static boolean determineSameType(int numOfPrints,
                                              int four_by_six, int five_by_seven, int eight_by_ten,
                                              int four_six_matte, int five_seven_matte, int eight_ten_matte){
-        boolean sameType = false;
+        boolean sameType;
         // Count the number of non-zero print sizes
         int nonZeroPrintSizes = 0;
         if (four_by_six > 0) nonZeroPrintSizes++;
@@ -149,7 +149,7 @@ public class Print {
         } else {
             // Different sized prints
             sameType = false;
-        };
+        }
         return sameType;
     }
 
