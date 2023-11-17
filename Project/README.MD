@@ -41,6 +41,6 @@ The total cost is: $14.60
 ```
 
 ## Group Members
-Brannon McCutcheon
-Cora Spruill
-Luis Vazquez
+* Brannon McCutcheon
+* Cora Spruill
+* Luis Vazquez
