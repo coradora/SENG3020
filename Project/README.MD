@@ -37,7 +37,7 @@ Should the prints be processed in 1 hour? (yes/no):
 yes
 Enter the discount code (if any, otherwise just press enter): 
 
-The total cost is: $14.60```
+The total cost is: $14.60```plaintext
 
 
 ## Group Members
