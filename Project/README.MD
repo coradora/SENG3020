@@ -20,7 +20,7 @@ java group1.Main
 
 ## Example
 
-```plaintext
+```
 Enter the number of 4x6 prints: 
 0 
 Enter the number of 4x6 prints that should be matte: 
@@ -37,8 +37,8 @@ Should the prints be processed in 1 hour? (yes/no):
 yes
 Enter the discount code (if any, otherwise just press enter): 
 
-The total cost is: $14.60```plaintext
-
+The total cost is: $14.60
+```
 
 ## Group Members
 Brannon McCutcheon
